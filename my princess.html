@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine?</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(214, 41, 118, 0.3);
+            max-width: 700px;
+            width: 90%;
+            z-index: 10;
+            position: relative;
+            border: 8px solid #ff6b93;
+        }
+        
+        h1 {
+            color: #ff4d7e;
+            font-size: 3.2rem;
+            margin-bottom: 25px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            line-height: 1.3;
+        }
+        
+        .heart-icon {
+            color: #ff4d7e;
+            font-size: 2.8rem;
+            margin: 0 10px;
+            animation: heartbeat 1.2s infinite;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 18px 40px;
+            font-size: 1.8rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            min-width: 180px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        
+        .yes-btn {
+            background-color: #ff6b93;
+            color: white;
+            transform: scale(1);
+        }
+        
+        .yes-btn:hover {
+            background-color: #ff4d7e;
+            transform: scale(1.05);
+        }
+        
+        .no-btn {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .no-btn:hover {
+            background-color: #5a6268;
+        }
+        
+        /* Moving button effect */
+        .no-btn.move {
+            position: absolute;
+            transition: all 0.5s ease;
+        }
+        
+        .message {
+            display: none;
+            margin-top: 40px;
+            padding: 25px;
+            background-color: #fff0f5;
+            border-radius: 20px;
+            border: 5px dashed #ff6b93;
+            animation: fadeIn 1s ease;
+        }
+        
+        .message h2 {
+            color: #ff4d7e;
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .message p {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .signature {
+            font-size: 2rem;
+            color: #ff4d7e;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: right;
+            font-style: italic;
+        }
+        
+        .hearts-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .heart-balloon {
+            position: absolute;
+            font-size: 2.5rem;
+            color: #ff4d7e;
+            opacity: 0.8;
+            animation: float 8s infinite linear;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .congrats {
+            font-size: 1.2rem;
+            color: #666;
+            margin-top: 20px;
+            font-style: italic;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .btn {
+                font-size: 1.5rem;
+                padding: 15px 30px;
+                min-width: 150px;
+            }
+            
+            .message h2 {
+                font-size: 2.2rem;
+            }
+            
+            .message p {
+                font-size: 1.5rem;
+            }
+            
+            .heart-icon {
+                font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .button-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts-container" id="heartsContainer"></div>
+    
+    <div class="container">
+        <h1>
+            <i class="fas fa-heart heart-icon"></i>
+            Will You Be My Valentine?
+            <i class="fas fa-heart heart-icon"></i>
+        </h1>
+        
+        <div class="button-container">
+            <button class="btn yes-btn" id="yesBtn">YES</button>
+            <button class="btn no-btn" id="noBtn">NO</button>
+        </div>
+        
+        <div class="message" id="message">
+            <h2>Yay! I'm so happy! <i class="fas fa-heart heart-icon"></i></h2>
+            <p>I knew you would say yes! Mwaaaaaaaaaaaa <3</p>
+            <p>You've made me the happiest person in the world!</p>
+            <div class="signature">From Eklavya</div>
+        </div>
+        
+        <p class="congrats">Click YES if you accept my Valentine's proposal!</p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const message = document.getElementById('message');
+            const heartsContainer = document.getElementById('heartsContainer');
+            
+            // Create floating hearts
+            function createHearts() {
+                const heartIcons = ['❤️', '💖', '💗', '💓', '💞', '💕', '❣️'];
+                
+                for (let i = 0; i < 15; i++) {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart-balloon');
+                    heart.innerHTML = heartIcons[Math.floor(Math.random() * heartIcons.length)];
+                    
+                    // Random position and size
+                    const size = Math.random() * 2 + 1;
+                    const left = Math.random() * 100;
+                    const delay = Math.random() * 5;
+                    
+                    heart.style.left = `${left}%`;
+                    heart.style.fontSize = `${size}rem`;
+                    heart.style.animationDelay = `${delay}s`;
+                    
+                    heartsContainer.appendChild(heart);
+                }
+            }
+            
+            // Make the NO button move when hovered
+            noBtn.addEventListener('mouseover', function() {
+                // Calculate random position within the container
+                const container = document.querySelector('.container');
+                const containerRect = container.getBoundingClientRect();
+                
+                const maxX = containerRect.width - noBtn.offsetWidth - 30;
+                const maxY = containerRect.height - noBtn.offsetHeight - 30;
+                
+                const randomX = Math.random() * maxX;
+                const randomY = Math.random() * maxY;
+                
+                // Apply the new position
+                noBtn.style.position = 'absolute';
+                noBtn.style.left = `${randomX}px`;
+                noBtn.style.top = `${randomY}px`;
+                
+                // Add some fun text change
+                const noTexts = ["Are you sure?", "Think again!", "Maybe YES?", "Please say yes!", "Don't click NO!"];
+                noBtn.textContent = noTexts[Math.floor(Math.random() * noTexts.length)];
+            });
+            
+            // Handle YES button click
+            yesBtn.addEventListener('click', function() {
+                // Hide buttons and show message
+                document.querySelector('.button-container').style.display = 'none';
+                message.style.display = 'block';
+                document.querySelector('.congrats').style.display = 'none';
+                
+                // Add more hearts for celebration
+                for (let i = 0; i < 10; i++) {
+                    setTimeout(() => {
+                        createHeartBurst();
+                    }, i * 150);
+                }
+                
+                // Change title
+                document.querySelector('h1').innerHTML = 
+                    '<i class="fas fa-heart heart-icon"></i> Thank You! <i class="fas fa-heart heart-icon"></i>';
+                
+                // Play a sound (optional)
+                playCelebrationSound();
+            });
+            
+            // Create burst hearts for celebration
+            function createHeartBurst() {
+                const heart = document.createElement('div');
+                heart.classList.add('heart-balloon');
+                heart.innerHTML = '❤️';
+                
+                // Random position
+                const left = Math.random() * 100;
+                heart.style.left = `${left}%`;
+                heart.style.fontSize = `${Math.random() * 2 + 1.5}rem`;
+                heart.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                
+                heartsContainer.appendChild(heart);
+                
+                // Remove after animation completes
+                setTimeout(() => {
+                    heart.remove();
+                }, 3000);
+            }
+            
+            // Play celebration sound
+            function playCelebrationSound() {
+                // Create a simple beep sound using Web Audio API
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.value = 523.25; // C5 note
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 1);
+                } catch (e) {
+                    console.log("Audio not supported");
+                }
+            }
+            
+            // Initialize the page
+            createHearts();
+            
+            // Add a fun effect to the YES button
+            yesBtn.addEventListener('mouseover', function() {
+                const yesTexts = ["Click me!", "I'm the one!", "Yes please!", "Say YES!", "Choose me!"];
+                yesBtn.textContent = yesTexts[Math.floor(Math.random() * yesTexts.length)];
+                
+                setTimeout(() => {
+                    yesBtn.textContent = "YES";
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+</html>
